@@ -66,6 +66,13 @@ class EP500P(BluettiDevice):
         self.struct.add_decimal_field('internal_current_three', 78, 1)
         self.struct.add_uint_field('internal_power_three', 79)
         self.struct.add_decimal_field('ac_input_frequency', 80, 2)
+
+        # Auxiliary DC output (12V port)
+        self.struct.add_decimal_field('aux_dc_voltage', 83, 1)
+        self.struct.add_decimal_field('aux_dc_current', 84, 1)
+        self.struct.add_uint_field('aux_dc_power', 85)
+
+        # Internal MPPT / DC input
         self.struct.add_decimal_field('internal_dc_input_voltage', 86, 1)
         self.struct.add_uint_field('internal_dc_input_power', 87)
         self.struct.add_decimal_field('internal_dc_input_current', 88, 1, (0, 15))
@@ -73,10 +80,17 @@ class EP500P(BluettiDevice):
         # Battery Data
         self.struct.add_uint_field('pack_num_max', 91)
         self.struct.add_decimal_field('total_battery_voltage', 92, 1)
+        self.struct.add_decimal_field('total_battery_current', 93, 1)
         self.struct.add_decimal_field('pack_voltage', 92, 1)  # Full pack voltage
         self.struct.add_uint_field('pack_battery_percent', 94)
         self.struct.add_uint_field('pack_num', 96)
         self.struct.add_decimal_array_field('cell_voltages', 105, 16, 2)
+
+        # Per-tracker solar input data (registers 160-205)
+        self.struct.add_decimal_field('dc_input_1_voltage', 163, 1)
+        self.struct.add_uint_field('dc_input_1_power', 165)
+        self.struct.add_decimal_field('dc_input_2_voltage', 170, 1)
+        self.struct.add_uint_field('dc_input_2_power', 172)
 
         # Controls
         self.struct.add_enum_field('ups_mode', 3001, UpsMode)
@@ -100,7 +114,8 @@ class EP500P(BluettiDevice):
     def polling_commands(self) -> List[ReadHoldingRegisters]:
         return [
             ReadHoldingRegisters(10, 40),
-            ReadHoldingRegisters(70, 21),
+            ReadHoldingRegisters(70, 90),
+            ReadHoldingRegisters(160, 46),
             ReadHoldingRegisters(3001, 61),
         ]
 
@@ -112,8 +127,9 @@ class EP500P(BluettiDevice):
     def logging_commands(self) -> List[ReadHoldingRegisters]:
         return [
             ReadHoldingRegisters(0, 70),
-            ReadHoldingRegisters(70, 21),
-            ReadHoldingRegisters(3001, 61),
+            ReadHoldingRegisters(70, 90),
+            ReadHoldingRegisters(160, 46),
+            ReadHoldingRegisters(3000, 62),
         ]
 
     @property
