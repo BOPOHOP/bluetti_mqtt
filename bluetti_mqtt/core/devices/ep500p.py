@@ -81,7 +81,7 @@ class EP500P(BluettiDevice):
         self.struct.add_uint_field('pack_num_max', 91)
         self.struct.add_decimal_field('total_battery_voltage', 92, 1)
         self.struct.add_decimal_field('total_battery_current', 93, 1)
-        self.struct.add_decimal_field('pack_voltage', 92, 1)  # Full pack voltage
+        # self.struct.add_decimal_field('pack_voltage', 92, 1)  # Full pack voltage
         self.struct.add_uint_field('pack_battery_percent', 94)
         self.struct.add_uint_field('pack_num', 96)
         self.struct.add_decimal_array_field('cell_voltages', 105, 16, 2)
@@ -114,9 +114,9 @@ class EP500P(BluettiDevice):
     def polling_commands(self) -> List[ReadHoldingRegisters]:
         return [
             ReadHoldingRegisters(10, 40),
-            ReadHoldingRegisters(70, 90),
+            ReadHoldingRegisters(70, 21),
             ReadHoldingRegisters(160, 46),
-            ReadHoldingRegisters(3001, 61),
+            ReadHoldingRegisters(3001, 62),
         ]
 
     @property
@@ -127,7 +127,7 @@ class EP500P(BluettiDevice):
     def logging_commands(self) -> List[ReadHoldingRegisters]:
         return [
             ReadHoldingRegisters(0, 70),
-            ReadHoldingRegisters(70, 90),
+            ReadHoldingRegisters(70, 21),
             ReadHoldingRegisters(160, 46),
             ReadHoldingRegisters(3000, 62),
         ]
