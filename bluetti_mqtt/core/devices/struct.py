@@ -188,7 +188,7 @@ class DeviceStruct:
         self.fields.append(UintField(name, address, range))
 
     def add_int_field(self, name: str, address: int, range: Tuple[int, int] = None):
-        self.fields.append(UintField(name, address, range))
+        self.fields.append(IntField(name, address, range))
 
     def add_uint32_field(self, name: str, address: int, range: Tuple[int, int] = None):
         self.fields.append(Uint32Field(name, address, range))
